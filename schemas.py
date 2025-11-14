@@ -13,8 +13,9 @@ Model name is converted to lowercase for the collection name:
 
 from pydantic import BaseModel, Field
 from typing import Optional
+from datetime import datetime
 
-# Example schemas (replace with your own):
+# Example schemas (you can keep or remove if not needed)
 
 class User(BaseModel):
     """
@@ -38,8 +39,30 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# App-specific schemas
+
+class Adminuser(BaseModel):
+    """
+    Admin users for managing the madrasah site
+    Collection name: "adminuser"
+    """
+    name: str
+    email: str
+    username: str
+    password_hash: str
+    role: str = Field("admin", description="Role of the user")
+    is_active: bool = True
+
+class Session(BaseModel):
+    """
+    Sessions collection to store auth tokens
+    Collection name: "session"
+    """
+    user_id: str
+    token: str
+    role: str
+    expires_at: datetime
+    revoked: bool = False
 
 # Note: The Flames database viewer will automatically:
 # 1. Read these schemas from GET /schema endpoint
